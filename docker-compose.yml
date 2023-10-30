@@ -1,0 +1,7 @@
+topic_labeller:
+  build: ./topic_labeller
+  container_name: topic_labeller
+  env_file:
+    - .env
+  ports:
+      - 8080:8080

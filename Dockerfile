@@ -1,15 +1,13 @@
 FROM python:3.9
 
-COPY . .
+COPY . /app
 
-#RUN mkdir -p /data/source
-#RUN mkdir -p /data/inference
+WORKDIR /app
 
 RUN pip install --no-cache-dir -r requirements.txt
-#RUN pip install "dask[dataframe]"
 
-EXPOSE 150
+EXPOSE 8080
 
-ENTRYPOINT ["python3", "promt.py"]
+CMD ["python3", "promt.py"]
 
-CMD ["-h"]
+#CMD ["-h"]
