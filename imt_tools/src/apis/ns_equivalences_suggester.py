@@ -4,7 +4,7 @@ from src.core.equivalences_suggester import EquivalencesSuggester
 # ======================================================
 # Define namespace for managing collections
 # ======================================================
-api = Namespace("EquivalencesSuggester", description="Given an acronym and a context, returns the disambiguated word.")
+api = Namespace("EquivalencesSuggester", description="Given an acronym/list of acronyms and a context, returns the disambiguated word(s).")
 
 # Create TopicLabeller object
 es = EquivalencesSuggester(model="gpt-4")
