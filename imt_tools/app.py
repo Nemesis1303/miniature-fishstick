@@ -12,7 +12,7 @@ app.config["RESTX_MASK_SWAGGER"] = False
 api.init_app(app)
 
 if __name__ == '__main__':
-    cprint(figlet_format("EWB TM API",
+    cprint(figlet_format("IMT Tools API",
            font='big'), 'blue', attrs=['bold'])
     print('\n')    
     

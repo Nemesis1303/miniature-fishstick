@@ -1,26 +1,37 @@
-import argparse
-import os
-import openai
+from src.core.promt import Promt
 
 
-class TopicLabeller(object):
+class TopicLabeller(Promt):
+    """A class to label chemical descriptions with topics.
+    """
 
     def __init__(
         self,
-        model,
-        temperature=0.2,
-        max_tokens=1000,
-        frequency_penalty=0.0
+        model: str,
+        temperature: float = 0.2,
+        max_tokens: int = 1000,
+        frequency_penalty: float = 0.0
     ) -> None:
-        try:
-            openai.api_key = os.environ["OPENAI_API_KEY"]
-        except KeyError:
-            raise Exception(
-                "Please set the OPENAI_API_KEY environment variable.")
+        """Initialise the TopicLabeller class.
+
+        Parameters
+        ----------
+        model : str
+            The OpenAI model to use.
+        temperature : float, optional
+            The temperature of the OpenAI model, by default 0.2
+        max_tokens : int, optional
+            The maximum number of tokens to use, by default 1000
+        frequency_penalty : float, optional
+            The frequency penalty of the OpenAI model, by default 0.0
+        """
+
+        super().__init__()
 
         example_1 = ('network, traffic, vehicle, energy, communication, service, deep, reinforcement, sensor, wireless, road, channel, management, node, UAV',
                      'Traffic Management and Autonomous Driving')
 
+        # Set the parameters for the OpenAI model
         self.parameters = {
             "model": model,
             "messages": [
@@ -31,57 +42,6 @@ class TopicLabeller(object):
             "max_tokens": max_tokens,
             "frequency_penalty": frequency_penalty
         }
-
-    def set_parameters(self, **kwargs) -> None:
-        """Set parameters for the OpenAI model.
-
-        Parameters
-        ----------
-        **kwargs : dict
-            A dictionary of parameters to set.
-        """
-
-        for key, value in kwargs.items():
-            if key != "messages":
-                self.parameters[key] = value
-                
-    def update_messages(
-        self,
-        messages: list
-    ) -> None:
-        """Update the messages of the OpenAI model, always keeping the first message (i.e., the system role)
-        
-        Parameters
-        ----------
-        messages : list
-            A list of messages to update the model with.
-        """
-
-        self.parameters["messages"] = [
-            self.parameters["messages"][0], *messages]
-
-        return
-
-    def _promt(self, gpt_prompt) -> str:
-        """Promt the OpenAI ChatCompletion model with a message.
-        
-        Parameters
-        ----------
-        gpt_prompt : str
-            A message to promt the model with.
-        
-        Returns
-        -------
-        str
-            The response of the OpenAI model.
-        """
-
-        message = [{"role": "user", "content": gpt_prompt}]
-        self.update_messages(message)
-        response = openai.ChatCompletion.create(
-            **self.parameters
-        )
-        return response["choices"][0]["message"]["content"]
 
     def get_label(self, chem_desc: str) -> str:
         """Get a label for a chemical description.

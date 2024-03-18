@@ -1,7 +1,17 @@
-topic_labeller:
-  build: ./topic_labeller
-  container_name: topic_labeller
-  env_file:
-    - .env
-  ports:
-      - 8080:8080
+version: "3.8"
+
+networks:
+  miniature-fishstick-net:
+    name: ml4ds_net
+    external: true
+
+services:
+  imt_tools:
+    build: ./imt_tools
+    container_name: imt_tools
+    env_file:
+      - .env
+    ports:
+        - 8080:8080
+    networks:
+        - miniature-fishstick-net
